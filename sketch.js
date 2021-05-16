@@ -1,44 +1,70 @@
-var car,wall;
-var speed,weight;
+var ground
+var jerry
+var tom
+
+ 
+function preload() {
+    //load the images here
+groundImage=loadImage("images/garden.png")
+toma =loadAnimation("images/tomOne.png")
+tomb=loadAnimation("images/tomTwo.png","images/tomThree.png")
+tomc=loadAnimation("images/tomFour.png") 
+
+rata=loadAnimation("images/jerryOne.png")
+ratb=loadAnimation("images/jerryTwo.png","images/jerryThree.png")
+ratc=loadAnimation("images/jerryFour.png")
 
 
-function setup() {
-  createCanvas(1300,400);
+}
 
-  speed=random(55,90);
-  weight=random(400,1500);
+function setup(){
+    createCanvas(1000,800);
+    //create tom and jerry sprites here
+     jerry= createSprite (72,700,20,20);
+    jerry.addAnimation ("mouse",rata);
+    jerry.addAnimation ("teasing",ratb);
+    jerry.addAnimation ("glass",ratc);
+  
+    jerry.scale =0.1;
 
 
-  car = createSprite(50, 200, 80, 80);
-
-  car.velocityX = speed;
-
-  car.shapeColor = color(250);
-
-
-  wall = createSprite(1270,200,60,height/2);
-  wall.shapeColor = color(0,255,0);
+    
+   tom=createSprite(600,700,20,20);
+   tom.addAnimation("cat",toma);
+   tom.addAnimation("runningcat",tomb);
+   tom.addAnimation("sitting",tomc);
+  
+   tom.scale= 0.1;
+   
+    
 
 }
 
 function draw() {
-  background(0); 
-  if(wall.x-car.x < (car.width+wall.width)/2)
-  {
-    car .velocityX=0;
-    var deformation=0.5* weight * speed * speed/22509;
-    if(deformation>180)
-    {
-      car.shapeColor= color(255,0,0);
-    } 
-    if(deformation<180 && deformation>100) 
-       {
-      car.shapeColor= color(230,230,0);
-    } 
-    if(deformation<100)
-    {
-      car.shapeColor= color(0,0,250);
-    } 
-  }
-  drawSprites();
+
+    background(groundImage);
+    //Write condition here to evalute if tom and jerry collide
+
+   if(tom.x-jerry.x<70){
+        tom.velocityX=0
+        tom.changeAnimation("sitting",tomc);
+        jerry.changeAnimation ("glass",ratc);
+   }
+
+    drawSprites();
+}
+
+
+function keyPressed(){
+    if(keyCode===LEFT_ARROW){
+        tom.velocityX=-5
+        tom.changeAnimation("runningcat",tomb); 
+        jerry.frameDelay = 25;
+        jerry.changeAnimation ("teasing",ratb);
+    }
+  
+
+  //For moving and changing animation write code here
+
+
 }
