@@ -1,70 +1,55 @@
-var ground
-var jerry
-var tom
+var bg, bgImg;
+var tom, tomResting, tomWalking, tomCollided;
+var jerry, jerryStanding, jerryMoving, jerryCollided;
 
- 
+
 function preload() {
-    //load the images here
-groundImage=loadImage("images/garden.png")
-toma =loadAnimation("images/tomOne.png")
-tomb=loadAnimation("images/tomTwo.png","images/tomThree.png")
-tomc=loadAnimation("images/tomFour.png") 
-
-rata=loadAnimation("images/jerryOne.png")
-ratb=loadAnimation("images/jerryTwo.png","images/jerryThree.png")
-ratc=loadAnimation("images/jerryFour.png")
-
-
+  bgImg=loadImage("garden.png");  
+  tomResting=loadAnimation("cat1.png");
+  tomWalking=loadAnimation("cat2.png","cat3.png");
+  tomCollided=loadAnimation("cat4.png");
+  jerryStanding=loadAnimation("mouse1.png");
+  jerryMoving=loadAnimation("mouse2.png","mouse3.png");
+  jerryCollided=loadAnimation("mouse4.png");
 }
+
 
 function setup(){
-    createCanvas(1000,800);
-    //create tom and jerry sprites here
-     jerry= createSprite (72,700,20,20);
-    jerry.addAnimation ("mouse",rata);
-    jerry.addAnimation ("teasing",ratb);
-    jerry.addAnimation ("glass",ratc);
-  
-    jerry.scale =0.1;
+  createCanvas(windowWidth, windowHeight);
 
+  bg=createSprite(windowWidth/2-200,windowHeight/2,windowWidth, windowHeight);
+  bg.addImage(bgImg);
+  bg.scale=1.5;
 
-    
-   tom=createSprite(600,700,20,20);
-   tom.addAnimation("cat",toma);
-   tom.addAnimation("runningcat",tomb);
-   tom.addAnimation("sitting",tomc);
-  
-   tom.scale= 0.1;
-   
-    
+  tom=createSprite(windowWidth-600,windowHeight-150,50,50);
+  tom.scale=0.2;
+  tom.addAnimation("Resting",tomResting);
+  tom.addAnimation("Walking",tomWalking);
+  tom.addAnimation("Collided",tomCollided);
 
+  jerry=createSprite(200,windowHeight-150,50,50);
+  jerry.scale=0.2;
+  jerry.addAnimation("Standing",jerryStanding);
+  jerry.addAnimation("Moving",jerryMoving);
+  jerry.addAnimation("Collided",jerryCollided);
 }
+
 
 function draw() {
+  background(255);
 
-    background(groundImage);
-    //Write condition here to evalute if tom and jerry collide
+  if (keyDown("LEFT_ARROW")){
+    tom.velocityX=-5;
+    tom.changeAnimation("Walking",tomWalking);
+    jerry.changeAnimation("Moving",jerryMoving);
+  }
 
-   if(tom.x-jerry.x<70){
-        tom.velocityX=0
-        tom.changeAnimation("sitting",tomc);
-        jerry.changeAnimation ("glass",ratc);
-   }
-
-    drawSprites();
-}
-
-
-function keyPressed(){
-    if(keyCode===LEFT_ARROW){
-        tom.velocityX=-5
-        tom.changeAnimation("runningcat",tomb); 
-        jerry.frameDelay = 25;
-        jerry.changeAnimation ("teasing",ratb);
-    }
-  
-
-  //For moving and changing animation write code here
-
-
+  if (tom.x - jerry.x < (tom.width-jerry.width)/2){
+    tom.velocityX=0;
+    tom.x=400;
+    tom.changeAnimation("Collided",tomCollided);
+    jerry.changeAnimation("Collided",jerryCollided);
+  }
+    
+  drawSprites();
 }
